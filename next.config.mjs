@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  /**
+   * sharp ships a native binding. Left to the bundler, Turbopack pulled it in
+   * through its ESM `externalImport` path and the addon failed to load
+   * (ERR_DLOPEN_FAILED on win32-x64), taking the server process down whenever
+   * /api/portfolio/image had to transcode. Marking it external makes Next load
+   * it as a plain runtime require, which resolves the platform package correctly.
+   */
+  serverExternalPackages: ["sharp"],
   // Allow dev resources (CSS, JS, HMR) for LAN access & tunneling (ngrok, Cloudflare, localtunnel, etc.)
   allowedDevOrigins: [
     'localhost',
