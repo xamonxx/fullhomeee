@@ -73,7 +73,10 @@ export function ProjectCardWithSlider({
           <img
             key={currentSlide.src}
             src={currentSlide.src}
-            alt={`${project.categoryLabel} – ${project.name}`}
+            // `project.name` already opens with the category, so prefixing it
+            // produced "Wardrobe – Wardrobe" — visible on screen whenever an
+            // image failed to load.
+            alt={`Foto proyek ${project.name}`}
             width={currentSlide.width || undefined}
             height={currentSlide.height || undefined}
             loading={eager ? "eager" : "lazy"}

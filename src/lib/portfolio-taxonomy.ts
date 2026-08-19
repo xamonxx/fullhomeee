@@ -134,18 +134,59 @@ export function getValidatedProjectInfo(
   };
 }
 
-/** Opaque id for a path, used in URLs. Decoded back to an absolute path by the image route. */
+/**
+ * Path of `absPath` relative to whichever content root contains it, using forward
+ * slashes. Returns null when the path is outside every root.
+ */
+function relativeToRoot(absPath: string): string | null {
+  const resolved = path.resolve(absPath);
+  for (const root of CONTENT_ROOTS) {
+    const base = path.resolve(root);
+    if (resolved === base) return "";
+    if (resolved.startsWith(base + path.sep)) {
+      return path.relative(base, resolved).split(path.sep).join("/");
+    }
+  }
+  return null;
+}
+
+/**
+ * Opaque id for a photo, used in URLs.
+ *
+ * Root-relative, not absolute. Absolute ids were baked into the prerendered HTML
+ * at build time and then rejected at runtime, because the host builds in one
+ * directory and serves from another — every image 403'd in production. Relative
+ * ids resolve against whatever root the running process sees, and they keep the
+ * server's directory layout out of public URLs.
+ */
 export function encodePath(p: string): string {
-  return Buffer.from(p).toString("base64url");
+  const rel = relativeToRoot(p);
+  return Buffer.from(rel ?? path.resolve(p)).toString("base64url");
 }
 
+/** Resolve an id back to an absolute path under one of the content roots. */
 export function decodePath(id: string): string {
-  return Buffer.from(id, "base64url").toString("utf-8");
+  const raw = Buffer.from(id, "base64url").toString("utf-8");
+  // Ids minted before the relative scheme, and anything hostile, stay absolute
+  // here so isPathSafe still gets the final say.
+  if (path.isAbsolute(raw) || /^[A-Za-z]:[\\/]/.test(raw)) return raw;
+
+  const rel = raw.split("/").join(path.sep);
+  for (const root of CONTENT_ROOTS) {
+    const candidate = path.resolve(root, rel);
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return path.resolve(CONTENT_ROOTS[0] ?? process.cwd(), rel);
 }
 
-/** Deterministic short hash for cache filenames — source paths contain spaces and ampersands. */
+/**
+ * Deterministic short hash for cache filenames — source paths contain spaces and
+ * ampersands. Hashes the root-relative path so a variant built during deployment
+ * is still found when the app runs from a different directory.
+ */
 export function variantHash(absPath: string): string {
-  return crypto.createHash("sha1").update(path.resolve(absPath)).digest("hex").slice(0, 16);
+  const key = relativeToRoot(absPath) ?? path.resolve(absPath);
+  return crypto.createHash("sha1").update(key).digest("hex").slice(0, 16);
 }
 
 export function variantFile(absPath: string, variant: VariantName): string {
