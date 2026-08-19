@@ -1,34 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { findProject } from "@/lib/portfolio-manifest";
+import { imageUrl } from "@/lib/portfolio-image";
 
-const LOCAL_KONTEN = path.join(process.cwd(), "Portofolio", "FULLHOME");
-const EXTERNAL_KONTEN = "F:\\KONTEN";
-
-function isPathSafe(filePath: string): boolean {
-  const resolved = path.resolve(filePath);
-  return (
-    resolved.startsWith(path.resolve(LOCAL_KONTEN)) ||
-    resolved.startsWith(path.resolve(EXTERNAL_KONTEN))
-  );
-}
-
-function collectImages(dir: string, results: string[]) {
-  try {
-    for (const item of fs.readdirSync(dir)) {
-      const full = path.join(dir, item);
-      try {
-        if (fs.statSync(full).isDirectory()) collectImages(full, results);
-        else if (/\.(jpg|jpeg|png|webp)$/i.test(item)) results.push(full);
-      } catch {}
-    }
-  } catch {}
-}
+/** Photos returned per request. The modal pages through the rest on demand. */
+const DEFAULT_LIMIT = 24;
+const MAX_LIMIT = 60;
 
 export interface ProjectImage {
   id: string;
   src: string;
   filename: string;
+  width: number;
+  height: number;
+  blur: string;
 }
 
 const FALLBACK_IMAGES: Record<string, string[]> = {
@@ -49,49 +33,57 @@ const FALLBACK_IMAGES: Record<string, string[]> = {
   ],
 };
 
+function fallbackResponse(key: string) {
+  const list = FALLBACK_IMAGES[key] ?? FALLBACK_IMAGES["default"];
+  const images: ProjectImage[] = list.map((url, idx) => ({
+    id: `img-${idx}`,
+    src: url,
+    filename: `Foto Dokumentasi ${idx + 1}.jpg`,
+    width: 0,
+    height: 0,
+    blur: "",
+  }));
+  return NextResponse.json({ images, total: images.length, offset: 0, hasMore: false });
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const encodedId = searchParams.get("id");
+  const id = searchParams.get("id");
 
-  if (!encodedId) return NextResponse.json({ images: [] }, { status: 400 });
+  if (!id) return NextResponse.json({ images: [], total: 0, offset: 0, hasMore: false }, { status: 400 });
 
-  if (encodedId.startsWith("fallback-")) {
-    const list = FALLBACK_IMAGES[encodedId] ?? FALLBACK_IMAGES["default"];
-    const images: ProjectImage[] = list.map((url, idx) => ({
-      id: `img-${idx}`,
-      src: url,
-      filename: `Foto Dokumentasi ${idx + 1}.jpg`,
-    }));
-    return NextResponse.json({ images, total: images.length });
-  }
+  if (id.startsWith("fallback-")) return fallbackResponse(id);
+
+  const offset = Math.max(parseInt(searchParams.get("offset") ?? "0", 10) || 0, 0);
+  const limit = Math.min(
+    Math.max(parseInt(searchParams.get("limit") ?? String(DEFAULT_LIMIT), 10) || DEFAULT_LIMIT, 1),
+    MAX_LIMIT
+  );
 
   try {
-    const projPath = Buffer.from(encodedId, "base64url").toString("utf-8");
-    if (!isPathSafe(projPath)) return NextResponse.json({ images: [] }, { status: 403 });
+    const project = findProject(id);
+    if (!project) return fallbackResponse("default");
 
-    if (!fs.existsSync(projPath)) {
-      const list = FALLBACK_IMAGES["default"];
-      const images: ProjectImage[] = list.map((url, idx) => ({
-        id: `img-${idx}`,
-        src: url,
-        filename: `Foto Dokumentasi ${idx + 1}.jpg`,
-      }));
-      return NextResponse.json({ images, total: images.length });
-    }
+    const total = project.images.length;
+    const slice = project.images.slice(offset, offset + limit);
 
-    const raw: string[] = [];
-    collectImages(projPath, raw);
-    raw.sort();
-
-    const images: ProjectImage[] = raw.map((fp) => ({
-      id: Buffer.from(fp).toString("base64url"),
-      src: `/api/portfolio/image?p=${Buffer.from(fp).toString("base64url")}`,
-      filename: path.basename(fp),
+    const images: ProjectImage[] = slice.map((img) => ({
+      id: img.id,
+      src: imageUrl(img.id, "thumb"),
+      filename: img.filename,
+      width: img.width,
+      height: img.height,
+      blur: img.blur,
     }));
 
-    return NextResponse.json({ images, total: images.length });
+    return NextResponse.json({
+      images,
+      total,
+      offset,
+      hasMore: offset + images.length < total,
+    });
   } catch (err) {
     console.error("Project images error:", err);
-    return NextResponse.json({ images: [] }, { status: 500 });
+    return NextResponse.json({ images: [], total: 0, offset: 0, hasMore: false }, { status: 500 });
   }
 }

@@ -15,6 +15,10 @@ export function Header() {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
 
+  // The portfolio browser ships its own contextual bar (back link, section title,
+  // CTA). Rendering this one too stacked two headers on top of each other.
+  const hasOwnHeader = pathname?.startsWith("/portofolio") ?? false;
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -26,6 +30,8 @@ export function Header() {
     if (href === "#") return isHomePage ? "#" : "/";
     return isHomePage ? href : `/${href}`;
   }
+
+  if (hasOwnHeader) return null;
 
   return (
     <>

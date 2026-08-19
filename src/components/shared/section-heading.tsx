@@ -4,43 +4,65 @@ interface SectionHeadingProps {
   eyebrow?: string;
   title: string;
   subtitle?: string;
-  align?: "left" | "center" | "right";
+  /** Chapter number rendered above the title, e.g. "02". */
+  index?: string;
+  align?: "left" | "center";
   className?: string;
   titleClassName?: string;
 }
 
+/**
+ * Section header, editorial style.
+ *
+ * Defaults to left alignment. Previously this defaulted to centre and no section
+ * overrode it, so ten consecutive sections opened with the identical centred
+ * pill-eyebrow / serif-title / subtitle stack — the single strongest "generated
+ * template" signal on the page. The eyebrow is now a mono chapter label trailed
+ * by a hairline rather than a bordered pill badge.
+ */
 export function SectionHeading({
   eyebrow,
   title,
   subtitle,
-  align = "center",
+  index,
+  align = "left",
   className = "",
   titleClassName = "",
 }: SectionHeadingProps) {
-  const alignmentClasses = {
-    left: "text-left items-start",
-    center: "text-center items-center mx-auto",
-    right: "text-right items-end ml-auto",
-  };
+  const centered = align === "center";
 
   return (
-    <div className={cn("flex flex-col gap-3.5 max-w-3xl", alignmentClasses[align], className)}>
+    <div className={cn("flex flex-col", centered && "items-center text-center", className)}>
       {eyebrow && (
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-medium text-warm-gray bg-black/5 dark:bg-white/5 border border-foreground/10 w-fit backdrop-blur-md">
-          <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-          {eyebrow}
+        <div
+          className={cn(
+            "chapter-label mb-6 md:mb-8",
+            // A rule that runs off to one side only makes sense left-aligned.
+            centered && "justify-center [&::after]:hidden"
+          )}
+        >
+          {index && <span className="text-foreground/35 tabular-nums">{index}</span>}
+          <span>{eyebrow}</span>
         </div>
       )}
+
       <h2
         className={cn(
-          "font-serif text-3xl md:text-5xl lg:text-6xl text-primary leading-[1.1] font-medium tracking-tight",
+          "font-serif text-[2.1rem] leading-[1.05] md:text-5xl lg:text-[3.5rem] text-primary font-medium tracking-[-0.02em]",
+          centered ? "max-w-3xl" : "max-w-[18ch]",
           titleClassName
         )}
       >
         {title}
       </h2>
+
       {subtitle && (
-        <p className="font-sans text-base md:text-lg text-warm-gray leading-relaxed max-w-[65ch]">
+        <p
+          className={cn(
+            "font-sans text-sm md:text-base text-warm-gray leading-relaxed measure mt-5 md:mt-6",
+            centered && "mx-auto"
+          )}
+        >
           {subtitle}
         </p>
       )}

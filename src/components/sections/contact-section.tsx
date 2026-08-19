@@ -67,61 +67,52 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-32 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+    <section id="contact" className="py-24 md:py-36 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
         {/* Contact Left Info */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           <Reveal>
             <SectionHeading
-              eyebrow="FORMULIR KONSULTASI"
-              title="Diskusikan Proyek Interior Anda"
+              index="10"
+              eyebrow="Formulir konsultasi"
+              title="Diskusikan proyek interior Anda"
               subtitle="Isi rincian kebutuhan Anda. Tim desainer kami akan menyiapkan analisis tata ruang dan estimasi RAB awal."
-              align="left"
             />
           </Reveal>
 
           <Reveal delay={0.2}>
-            <div className="space-y-4 pt-2">
-              <div className="p-2 rounded-2xl bg-black/5 dark:bg-white/5 border border-foreground/10">
-                <div className="bg-background rounded-xl p-4 flex items-start gap-3.5 border border-foreground/5 shadow-xs">
-                  <div className="w-9 h-9 rounded-full bg-secondary/15 flex items-center justify-center shrink-0 text-secondary">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-base font-medium text-primary">
-                      Diskusi & Estimasi Awal Gratis
-                    </h4>
-                    <p className="font-sans text-xs text-warm-gray mt-0.5 leading-relaxed">
-                      Sesi konsultasi pertama tidak dipungut biaya dan tanpa komitmen terikat.
-                    </p>
-                  </div>
+            <dl className="mt-10 rule-list border-t border-foreground/15">
+              <div className="py-6 flex items-start gap-4">
+                <CheckCircle2 className="w-4 h-4 text-secondary shrink-0 mt-1" />
+                <div>
+                  <dt className="font-serif text-base font-medium text-primary">
+                    Diskusi &amp; estimasi awal gratis
+                  </dt>
+                  <dd className="font-sans text-xs text-warm-gray mt-1.5 leading-relaxed measure">
+                    Sesi konsultasi pertama tidak dipungut biaya dan tanpa komitmen terikat.
+                  </dd>
                 </div>
               </div>
-
-              <div className="p-2 rounded-2xl bg-black/5 dark:bg-white/5 border border-foreground/10">
-                <div className="bg-background rounded-xl p-4 flex items-start gap-3.5 border border-foreground/5 shadow-xs">
-                  <div className="w-9 h-9 rounded-full bg-secondary/15 flex items-center justify-center shrink-0 text-secondary">
-                    <MessageCircle className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-base font-medium text-primary">
-                      Format Pesan WhatsApp Rapi
-                    </h4>
-                    <p className="font-sans text-xs text-warm-gray mt-0.5 leading-relaxed">
-                      Sistem akan secara otomatis merangkum data Anda ke nomor WhatsApp studio kami.
-                    </p>
-                  </div>
+              <div className="py-6 flex items-start gap-4">
+                <MessageCircle className="w-4 h-4 text-secondary shrink-0 mt-1" />
+                <div>
+                  <dt className="font-serif text-base font-medium text-primary">
+                    Format pesan WhatsApp rapi
+                  </dt>
+                  <dd className="font-sans text-xs text-warm-gray mt-1.5 leading-relaxed measure">
+                    Sistem akan otomatis merangkum data Anda ke nomor WhatsApp studio kami.
+                  </dd>
                 </div>
               </div>
-            </div>
+            </dl>
           </Reveal>
         </div>
 
-        {/* Contact Right Form - Double Bezel Architecture */}
+        {/* Form keeps a single surface: elevation here marks an input area. */}
         <div className="lg:col-span-7">
-          <Reveal delay={0.1}>
-            <div className="p-2.5 sm:p-3.5 rounded-3xl bg-black/5 dark:bg-white/5 border border-foreground/10 shadow-xl">
-              <div className="bg-background rounded-[calc(1.5rem-0.25rem)] p-6 sm:p-8 md:p-10 border border-foreground/5 shadow-xs">
+          <Reveal delay={0.05}>
+            <div>
+              <div className="bg-background p-6 sm:p-8 md:p-10 border border-foreground/12 shadow-warm">
                 {isSuccess ? (
                   <div className="py-12 flex flex-col items-center justify-center text-center gap-4">
                     <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center text-secondary">

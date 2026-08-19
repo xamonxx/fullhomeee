@@ -35,6 +35,85 @@
   body {
     @apply bg-background text-foreground antialiased font-sans selection:bg-light-taupe selection:text-primary;
   }
+
+  /* Headings were breaking mid-phrase and stranding single words ("Warm Minimal /
+     Luxury", "Estimasi Jujur & / Garansi"). `balance` evens the line lengths;
+     `pretty` stops paragraphs ending on an orphan. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  blockquote,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  /* Figures in stat rows must not jitter between widths. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ─── Editorial primitives ───────────────────────────────────────────────────
+   Hierarchy comes from rules, scale and space — not from borders and shadows.
+   These replace the nested "double-bezel" card shells used across the sections.
+*/
+
+/* Chapter label: small mono caps trailed by a hairline that runs to the edge.
+   Alpha values are written as color-mix rather than Tailwind's `/15` modifier —
+   `foreground` resolves to a bare `var(--foreground)`, which has no
+   `<alpha-value>` placeholder, so opacity modifiers on it cannot be generated
+   inside `@apply`. */
+.chapter-label {
+  @apply flex items-center gap-4 font-mono text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-warm-gray;
+}
+.chapter-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: color-mix(in srgb, var(--foreground) 15%, transparent);
+}
+
+/* Large editorial numerals used by the trust list and process timeline. */
+.numeral {
+  @apply font-serif text-4xl md:text-5xl leading-none tabular-nums;
+  color: color-mix(in srgb, var(--foreground) 22%, transparent);
+}
+
+/* Hairline row separators — the card replacement. */
+.rule-list > * + * {
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+/* Comfortable measure. Paragraphs squeezed into card columns were wrapping to
+   eight short lines; nothing should read narrower than this. */
+.measure {
+  max-width: 62ch;
+}
+.measure-tight {
+  max-width: 48ch;
+}
+
+/* Warm-tinted elevation — pure black shadows read as grey smudge on cream. */
+.shadow-warm {
+  box-shadow:
+    0 1px 2px rgba(60, 44, 30, 0.04),
+    0 8px 24px -12px rgba(60, 44, 30, 0.12);
+}
+
+/* Fixed grain overlay: breaks up flat digital surfaces. Inline SVG, no asset. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -43,6 +122,69 @@
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ─── Entrance animations ───────────────────────────────────────────────────
+   Everything here is an enhancement layered on top of visible content. The
+   default state is always opacity:1 — content must never depend on JavaScript
+   (or on these rules loading) to be readable. Previously framer-motion rendered
+   this content at opacity:0 server-side, leaving the page blank until hydration.
+*/
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(32px); }
+}
+@keyframes reveal-down {
+  from { opacity: 0; transform: translateY(-32px); }
+}
+@keyframes reveal-left {
+  from { opacity: 0; transform: translateX(32px); }
+}
+@keyframes reveal-right {
+  from { opacity: 0; transform: translateX(-32px); }
+}
+@keyframes reveal-none {
+  from { opacity: 0; }
+}
+
+.reveal {
+  opacity: 1;
+}
+
+/* Scroll-driven: no JavaScript, no IntersectionObserver, no hydration wait.
+   Browsers without support simply show the content immediately. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal-up both cubic-bezier(0.32, 0.72, 0, 1);
+    animation-timeline: view();
+    animation-range: entry var(--reveal-start, 0%) entry 45%;
+  }
+  .reveal-down { animation-name: reveal-down; }
+  .reveal-left { animation-name: reveal-left; }
+  .reveal-right { animation-name: reveal-right; }
+  .reveal-none { animation-name: reveal-none; }
+}
+
+/* Above-the-fold content animates on paint, never on scroll — waiting for a
+   scroll event would delay the LCP element. */
+.enter {
+  animation: reveal-up 0.75s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.enter-down { animation-name: reveal-down; }
+.enter-left { animation-name: reveal-left; }
+.enter-right { animation-name: reveal-right; }
+.enter-none { animation-name: reveal-none; }
+
+.enter-d1 { animation-delay: 0.08s; }
+.enter-d2 { animation-delay: 0.16s; }
+.enter-d3 { animation-delay: 0.24s; }
+.enter-d4 { animation-delay: 0.32s; }
+.enter-d5 { animation-delay: 0.4s; }
+
+/* Grid cards: a short stagger driven by an inline --i custom property. */
+.card-enter {
+  animation: reveal-up 0.45s cubic-bezier(0.32, 0.72, 0, 1) both;
+  animation-delay: calc(var(--i, 0) * 40ms);
 }
 
 /* Reduced motion fallback */
@@ -57,5 +199,14 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Scroll-driven animations ignore animation-duration, so cancel them outright
+     and pin the content visible. */
+  .reveal,
+  .enter,
+  .card-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

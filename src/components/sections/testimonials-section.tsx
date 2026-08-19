@@ -1,7 +1,5 @@
 import { TestimonialItem } from "@/types";
-import { SectionHeading } from "@/components/shared/section-heading";
 import { Reveal } from "@/components/shared/reveal";
-import { Star, Quote } from "lucide-react";
 
 interface TestimonialsSectionProps {
   testimonials?: TestimonialItem[];
@@ -13,7 +11,8 @@ const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
     clientName: "Ibu Winda",
     projectType: "Wardrobe & Vanity Custom",
     location: "Cibaduyut, Bandung",
-    quote: "Hasil pengerjaan wardrobe dan meja rias sangat presisi sesuai gambar 3D. Tim FULLHOME ID sangat responsif dan finishing HPL-nya benar-benar rapi.",
+    quote:
+      "Hasil pengerjaan wardrobe dan meja rias sangat presisi sesuai gambar 3D. Tim FULLHOME ID sangat responsif dan finishing HPL-nya benar-benar rapi.",
     rating: 5,
   },
   {
@@ -21,7 +20,8 @@ const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
     clientName: "Ibu Grace",
     projectType: "Kitchen Set Semiklasik",
     location: "Ciskul, Bandung",
-    quote: "Suka banget dengan kitchen set semiklasik hasil pengerjaannya. Kombinasi warna krem dan profil kabinetnya bikin dapur keliatan luas dan mewah.",
+    quote:
+      "Suka banget dengan kitchen set semiklasik hasil pengerjaannya. Kombinasi warna krem dan profil kabinetnya bikin dapur keliatan luas dan mewah.",
     rating: 5,
   },
   {
@@ -29,63 +29,74 @@ const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
     clientName: "Bpk. Irfan",
     projectType: "Living Room & Credenza",
     location: "Cimahi",
-    quote: "Transparansi RAB awal sangat membantu menyesuaikan budget. Hasil instalasi tepat waktu dan garansinya bikin tenang.",
+    quote:
+      "Transparansi RAB awal sangat membantu menyesuaikan budget. Hasil instalasi tepat waktu dan garansinya bikin tenang.",
     rating: 5,
   },
 ];
 
+/**
+ * Client quotes, set as a pull quote with the remainder as an attributed list.
+ *
+ * Was three equal quote cards in a row — the pattern a reader has seen on every
+ * templated site. Leading with one quote at display size gives the words weight
+ * and lets the section breathe.
+ */
 export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
   const items = testimonials && testimonials.length > 0 ? testimonials : DEFAULT_TESTIMONIALS;
+  const [lead, ...rest] = items;
 
   return (
-    <section className="py-20 md:py-32 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
+    <section className="py-24 md:py-36 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
       <Reveal>
-        <SectionHeading
-          eyebrow="ULASAN KLIEN"
-          title="Pengalaman & Kepercayaan Klien"
-          subtitle="Tanggapan nyata dari pemilik hunian yang telah mempercayakan pengerjaan interiornya kepada FULLHOME ID Studio."
-        />
+        <div className="chapter-label mb-10 md:mb-14">
+          <span className="text-foreground/35 tabular-nums">08</span>
+          <span>Ulasan klien</span>
+        </div>
       </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 md:mt-20">
-        {items.map((item, idx) => (
-          <Reveal key={item.id} delay={idx * 0.1}>
-            {/* Outer Shell */}
-            <div className="p-2 rounded-3xl bg-black/5 dark:bg-white/5 border border-foreground/10 h-full group hover:border-foreground/25 transition-all duration-500">
-              {/* Inner Core */}
-              <div className="bg-background rounded-[calc(1.5rem-0.25rem)] p-7 md:p-8 h-full flex flex-col justify-between border border-foreground/5 shadow-xs group-hover:shadow-md transition-all">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <Quote className="w-7 h-7 text-secondary/30" />
-                    {item.rating && (
-                      <div className="flex gap-1 text-secondary">
-                        {Array.from({ length: item.rating }).map((_, i) => (
-                          <Star key={i} className="w-3.5 h-3.5 fill-secondary" />
-                        ))}
-                      </div>
-                    )}
-                  </div>
+      {lead && (
+        <Reveal>
+          <figure className="grid grid-cols-1 lg:grid-cols-12 gap-x-16 gap-y-8">
+            <blockquote className="lg:col-span-9">
+              <p className="font-serif text-[1.6rem] leading-[1.28] md:text-4xl lg:text-[2.75rem] md:leading-[1.22] text-primary font-medium tracking-[-0.015em]">
+                &ldquo;{lead.quote}&rdquo;
+              </p>
+            </blockquote>
+            <figcaption className="lg:col-span-3 lg:pt-3">
+              <span className="block font-serif text-lg text-primary">{lead.clientName}</span>
+              <span className="block font-sans text-xs text-warm-gray mt-1.5 leading-relaxed">
+                {lead.projectType}
+              </span>
+              <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-secondary mt-2.5">
+                {lead.location}
+              </span>
+            </figcaption>
+          </figure>
+        </Reveal>
+      )}
 
-                  <p className="font-sans text-xs md:text-sm text-warm-gray leading-relaxed italic mb-6">
+      {rest.length > 0 && (
+        <div className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-2 gap-x-16 border-t border-foreground/10">
+          {rest.map((item, idx) => (
+            <Reveal key={item.id} delay={idx * 0.06}>
+              <figure className="py-9 md:py-11 border-b border-foreground/10 h-full">
+                <blockquote>
+                  <p className="font-sans text-sm text-warm-gray leading-relaxed measure">
                     &ldquo;{item.quote}&rdquo;
                   </p>
-                </div>
-
-                <div className="pt-4 border-t border-foreground/10 flex items-center justify-between">
-                  <div>
-                    <h4 className="font-serif text-base font-medium text-primary">
-                      {item.clientName}
-                    </h4>
-                    <p className="font-sans text-[11px] text-warm-gray mt-0.5">
-                      {item.projectType} • {item.location}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
+                </blockquote>
+                <figcaption className="mt-5 flex items-baseline gap-3">
+                  <span className="font-serif text-base text-primary">{item.clientName}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-warm-gray">
+                    {item.projectType} · {item.location}
+                  </span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

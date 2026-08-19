@@ -56,3 +56,6 @@ Desktop.ini
 # Temporary / Temp assets
 scratch/
 *.tmp
+
+# Generated portfolio image variants (regenerate with: pnpm optimize:images)
+/.portfolio-cache/

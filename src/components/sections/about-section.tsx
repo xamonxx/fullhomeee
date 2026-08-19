@@ -1,309 +1,282 @@
 import Image from "next/image";
 import { Reveal } from "@/components/shared/reveal";
 import { WhatsAppButton } from "@/components/shared/whatsapp-button";
+import { SectionHeading } from "@/components/shared/section-heading";
 import { siteConfig } from "@/config/site";
-import { Compass, MapPin, Clock, ArrowUpRight, Navigation } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const stats = [
   {
-    value: "Since 2018",
-    label: "Pengalaman & Dedikasi",
+    value: "2018",
+    prefix: "Sejak",
+    label: "Pengalaman & dedikasi",
     description:
-      "Pengalaman menghadirkan solusi interior dan custom furniture untuk berbagai kebutuhan hunian.",
+      "Menghadirkan solusi interior dan custom furniture untuk berbagai kebutuhan hunian.",
   },
   {
     value: "4.048+",
-    label: "Proyek Terselesaikan",
+    label: "Proyek terselesaikan",
     description:
-      "Berbagai proyek interior yang telah diwujudkan dengan pendekatan desain dan kebutuhan yang beragam.",
+      "Proyek interior yang diwujudkan dengan pendekatan desain dan kebutuhan yang beragam.",
   },
   {
     value: "15+",
-    label: "Workshop & Production Support",
+    label: "Workshop & produksi",
     description:
-      "Didukung jaringan workshop dan produksi untuk menunjang proses pengerjaan yang terukur.",
+      "Jaringan workshop dan produksi yang menunjang proses pengerjaan terukur.",
   },
   {
     value: "150+",
-    label: "Tenaga Ahli",
-    description:
-      "Tim profesional yang mendukung setiap tahap proyek, dari desain hingga instalasi.",
+    label: "Tenaga ahli",
+    description: "Tim profesional yang mendukung setiap tahap, dari desain hingga instalasi.",
   },
 ];
 
 const values = [
   {
     number: "01",
-    title: "Materialitas Terpilih",
+    title: "Materialitas terpilih",
     description:
       "Kami memilih material dengan mempertimbangkan estetika, fungsi, dan ketahanan untuk memastikan setiap elemen interior memiliki kualitas yang dapat diandalkan dalam penggunaan jangka panjang.",
   },
   {
     number: "02",
-    title: "Akurasi Visual & Produksi",
+    title: "Akurasi visual & produksi",
     description:
       "Setiap detail dirancang secara presisi melalui proses desain dan visualisasi 3D sebelum masuk ke tahap produksi, sehingga hasil akhir dapat diwujudkan dengan tingkat akurasi yang tinggi.",
   },
   {
     number: "03",
-    title: "Transparansi Proses",
+    title: "Transparansi proses",
     description:
       "Kami percaya bahwa proyek interior yang baik dibangun melalui komunikasi yang jelas. Mulai dari desain, spesifikasi, RAB, hingga progres pengerjaan disampaikan secara transparan agar setiap keputusan dapat dilakukan dengan lebih yakin.",
   },
   {
     number: "04",
-    title: "Pengerjaan Bergaransi",
+    title: "Pengerjaan bergaransi",
     description:
       "Kualitas dan kepuasan klien menjadi bagian penting dalam setiap proyek. Karena itu, kami memberikan garansi pengerjaan sebagai bentuk komitmen terhadap kualitas hasil dan layanan yang kami berikan.",
   },
 ];
 
+/**
+ * Studio story, figures, principles and location.
+ *
+ * Every block here used to be the same nested bordered card: four stat cards, four
+ * value cards, a location card and a map card, each with its own double bezel. The
+ * figures are now a plain band divided by hairlines, the principles a two-column
+ * rule list, and the map keeps one frame because there it actually delineates an
+ * embedded surface.
+ */
 export function AboutSection() {
   const mapEmbedUrl = `https://maps.google.com/maps?q=5C8C%2B8P+Citatah,+West+Bandung+Regency,+West+Java&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   return (
-    <section id="about" className="py-20 md:py-32 bg-background relative overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col gap-20 md:gap-28">
-        {/* Main Split: Image & Story */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Double-Bezel Image Showcase */}
-          <div className="lg:col-span-5 relative lg:sticky lg:top-28 mb-6 lg:mb-0">
+    <section id="about" className="py-24 md:py-36 bg-background relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col gap-24 md:gap-36">
+        {/* Story — image bleeds left, text sits right of centre */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+          <div className="lg:col-span-5 relative lg:sticky lg:top-28">
             <Reveal direction="right">
-              {/* Outer Shell */}
-              <div className="p-2.5 rounded-3xl bg-black/5 dark:bg-white/5 border border-foreground/10 shadow-xl">
-                {/* Inner Core */}
-                <div className="relative aspect-[4/3] sm:aspect-[4/5] w-full rounded-[calc(1.5rem-0.25rem)] overflow-hidden bg-muted border border-foreground/5">
+              <figure className="relative">
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
                   <Image
+                    data-motion="parallax"
                     src="/images/about-home.png"
-                    alt="Filosofi desain interior FULLHOME ID"
+                    alt="Ruang keluarga hasil pengerjaan FULLHOME ID dengan palet kayu hangat"
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
-                    className="object-cover transition-transform duration-700 hover:scale-105"
+                    className="object-cover transition-transform duration-[1200ms] hover:scale-[1.03]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-
-                  {/* Floating Quote Badge inside on mobile, offset on desktop */}
-                  <div className="absolute bottom-3 right-3 sm:-bottom-5 sm:-right-4 bg-black/85 backdrop-blur-xl p-4 sm:p-5 rounded-2xl shadow-2xl border border-white/20 max-w-[88%] sm:max-w-xs z-10">
-                    <p className="font-serif text-xs sm:text-sm italic text-white leading-snug mb-2 font-medium">
-                      &ldquo;Rumah harus menjadi sanctuary tempat tubuh dan pikiran beristirahat.&rdquo;
-                    </p>
-                    <span className="font-sans text-[10px] font-mono tracking-wider text-white/90 uppercase font-semibold">
-                      — TIM DESAIN FULLHOME ID
-                    </span>
-                  </div>
                 </div>
-              </div>
+                <figcaption className="mt-6 border-l-2 border-secondary pl-5">
+                  <p className="font-serif italic text-base text-primary leading-snug measure-tight">
+                    &ldquo;Rumah harus menjadi sanctuary tempat tubuh dan pikiran
+                    beristirahat.&rdquo;
+                  </p>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-warm-gray mt-3 block">
+                    Tim desain FULLHOME ID
+                  </span>
+                </figcaption>
+              </figure>
             </Reveal>
           </div>
 
-          {/* Text Content */}
-          <div className="lg:col-span-7 flex flex-col gap-6 pt-4 lg:pt-0">
-            <Reveal delay={0.1}>
-              <h2 className="font-serif text-3xl md:text-5xl text-primary font-medium leading-[1.12] tracking-tight">
-                Menciptakan Ruang yang{" "}
-                <span className="italic font-normal text-secondary">
-                  Bernapas, Fungsional,
-                </span>{" "}
-                dan Tak Lekang oleh Waktu.
+          <div className="lg:col-span-7 flex flex-col gap-7">
+            <Reveal delay={0.05}>
+              <div className="chapter-label mb-6">
+                <span className="text-foreground/35 tabular-nums">05</span>
+                <span>Tentang studio</span>
+              </div>
+              <h2 className="font-serif text-[2.1rem] leading-[1.05] md:text-5xl lg:text-[3.5rem] text-primary font-medium tracking-[-0.02em]">
+                Menciptakan ruang yang{" "}
+                <span className="italic font-normal text-secondary">bernapas, fungsional,</span>{" "}
+                dan tak lekang oleh waktu
               </h2>
             </Reveal>
 
-            <Reveal delay={0.2}>
-              <div className="flex flex-col gap-4 font-sans text-sm md:text-base text-warm-gray leading-relaxed">
+            <Reveal delay={0.1}>
+              <div className="flex flex-col gap-5 font-sans text-sm md:text-base text-warm-gray leading-relaxed measure">
                 <p>
-                  FULLHOME ID hadir sejak 2018 dengan satu komitmen: menciptakan ruang yang tidak hanya indah secara visual, tetapi juga memiliki fungsi, karakter, dan kualitas yang bertahan dalam jangka panjang.
+                  FULLHOME ID hadir sejak 2018 dengan satu komitmen: menciptakan ruang yang tidak
+                  hanya indah secara visual, tetapi juga memiliki fungsi, karakter, dan kualitas
+                  yang bertahan dalam jangka panjang.
                 </p>
                 <p>
-                  Kami menghadirkan solusi desain interior dan custom furniture yang dirancang secara personal untuk setiap kebutuhan—mulai dari kitchen set, wardrobe, kamar tidur, ruang keluarga, hingga interior rumah secara menyeluruh. Dengan memadukan estetika, material pilihan, dan pengerjaan presisi, setiap detail dirancang untuk menciptakan hunian yang merepresentasikan karakter serta gaya hidup penghuninya.
+                  Kami menghadirkan solusi desain interior dan custom furniture yang dirancang
+                  secara personal untuk setiap kebutuhan—mulai dari kitchen set, wardrobe, kamar
+                  tidur, ruang keluarga, hingga interior rumah secara menyeluruh. Dengan memadukan
+                  estetika, material pilihan, dan pengerjaan presisi, setiap detail dirancang untuk
+                  menciptakan hunian yang merepresentasikan karakter serta gaya hidup penghuninya.
                 </p>
                 <p>
-                  Didukung oleh pengalaman menangani ribuan proyek, jaringan workshop, dan tenaga ahli berpengalaman, FULLHOME ID berkomitmen memberikan proses yang terukur, transparan, dan terpercaya—dari tahap konsultasi dan desain hingga produksi, instalasi, serta penyelesaian proyek.
-                </p>
-                <p className="font-serif italic text-primary text-base md:text-lg">
-                  Kami percaya, sebuah ruang yang baik bukan sekadar tempat untuk tinggal. Ia adalah bagian dari kehidupan yang tumbuh bersama Anda.
+                  Didukung oleh pengalaman menangani ribuan proyek, jaringan workshop, dan tenaga
+                  ahli berpengalaman, FULLHOME ID berkomitmen memberikan proses yang terukur,
+                  transparan, dan terpercaya—dari tahap konsultasi dan desain hingga produksi,
+                  instalasi, serta penyelesaian proyek.
                 </p>
               </div>
             </Reveal>
 
-            <Reveal delay={0.3}>
+            <Reveal delay={0.15}>
+              <p className="font-serif italic text-primary text-lg md:text-xl leading-snug measure border-t border-foreground/15 pt-7">
+                Kami percaya, sebuah ruang yang baik bukan sekadar tempat untuk tinggal. Ia adalah
+                bagian dari kehidupan yang tumbuh bersama Anda.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.2}>
               <div className="pt-2">
-                <WhatsAppButton variant="primary">
-                  Mulai Diskusi Proyek Anda
-                </WhatsAppButton>
+                <WhatsAppButton variant="primary">Mulai diskusi proyek Anda</WhatsAppButton>
               </div>
             </Reveal>
           </div>
         </div>
 
-        {/* Statistics / Trust Numbers */}
-        <Reveal delay={0.2}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {stats.map((item, idx) => (
-              <div
-                key={idx}
-                className="p-2 rounded-3xl bg-black/5 dark:bg-white/5 border border-foreground/10 h-full group hover:border-foreground/20 transition-all"
-              >
-                <div className="bg-background rounded-[calc(1.5rem-0.25rem)] p-6 h-full flex flex-col justify-between border border-foreground/5 shadow-xs">
-                  <div>
-                    <span className="font-serif text-3xl md:text-4xl font-medium text-primary block mb-1">
-                      {item.value}
+        {/* Figures — one band, hairline dividers, no boxes */}
+        <Reveal>
+          <dl className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 border-t border-foreground/20 pt-10">
+            {stats.map((item) => (
+              <div key={item.label}>
+                <dt className="font-serif text-3xl md:text-[2.75rem] leading-none font-medium text-primary tnum">
+                  {item.prefix && (
+                    <span className="block font-sans text-[11px] uppercase tracking-[0.2em] text-warm-gray mb-2">
+                      {item.prefix}
                     </span>
-                    <h3 className="font-sans text-xs font-semibold uppercase tracking-wider text-secondary mb-2">
-                      {item.label}
+                  )}
+                  {item.value}
+                </dt>
+                <dd className="mt-4">
+                  <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-secondary mb-2">
+                    {item.label}
+                  </span>
+                  <span className="block font-sans text-xs text-warm-gray leading-relaxed">
+                    {item.description}
+                  </span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+
+        {/* Principles — two-column rule list */}
+        <div>
+          <Reveal>
+            <SectionHeading
+              index="06"
+              eyebrow="Prinsip & nilai utama"
+              title="Fondasi layanan FULLHOME ID"
+            />
+          </Reveal>
+
+          <div className="mt-14 md:mt-20 grid grid-cols-1 md:grid-cols-2 gap-x-16 border-t border-foreground/10">
+            {values.map((item, idx) => (
+              <Reveal key={item.number} delay={idx * 0.06}>
+                <article className="flex gap-6 md:gap-8 py-9 md:py-11 border-b border-foreground/10 h-full">
+                  <span className="numeral shrink-0 pt-1">{item.number}</span>
+                  <div>
+                    <h3 className="font-serif text-xl md:text-2xl font-medium text-primary leading-snug mb-3">
+                      {item.title}
                     </h3>
-                    <p className="font-sans text-xs text-warm-gray leading-relaxed">
+                    <p className="font-sans text-sm text-warm-gray leading-relaxed measure">
                       {item.description}
                     </p>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
-        {/* Our Values Section */}
-        <div className="flex flex-col gap-10">
-          <Reveal>
-            <div className="text-center max-w-2xl mx-auto">
-              <span className="text-xs font-mono tracking-widest uppercase text-warm-gray bg-black/5 dark:bg-white/5 border border-foreground/10 px-3.5 py-1.5 rounded-full inline-block mb-3">
-                PRINSIP & NILAI UTAMA
-              </span>
-              <h3 className="font-serif text-2xl md:text-4xl font-medium text-primary">
-                Fondasi Layanan FULLHOME ID
-              </h3>
-            </div>
-          </Reveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {values.map((item, idx) => (
-              <Reveal key={item.number} delay={idx * 0.1}>
-                <div className="p-2 rounded-3xl bg-black/5 dark:bg-white/5 border border-foreground/10 h-full group hover:border-foreground/25 transition-all duration-300">
-                  <div className="bg-background rounded-[calc(1.5rem-0.25rem)] p-7 h-full flex flex-col justify-between border border-foreground/5 shadow-xs">
-                    <div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="font-mono text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-secondary/10 text-secondary border border-secondary/20">
-                          {item.number}
-                        </span>
-                        <h4 className="font-serif text-xl font-medium text-primary">
-                          {item.title}
-                        </h4>
-                      </div>
-                      <p className="font-sans text-xs md:text-sm text-warm-gray leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                </article>
               </Reveal>
             ))}
           </div>
         </div>
 
-        {/* Office Location & Map Block */}
-        <div id="location" className="flex flex-col gap-10 pt-8 border-t border-foreground/10">
+        {/* Location */}
+        <div id="location">
           <Reveal>
-            <div className="text-center max-w-2xl mx-auto">
-              <span className="text-xs font-mono tracking-widest uppercase text-warm-gray bg-black/5 dark:bg-white/5 border border-foreground/10 px-3.5 py-1.5 rounded-full inline-block mb-3">
-                LOKASI OFFICE
-              </span>
-              <h3 className="font-serif text-2xl md:text-4xl font-medium text-primary mb-2">
-                Kunjungi Office Kami
-              </h3>
-              <p className="font-sans text-xs md:text-sm text-warm-gray leading-relaxed">
-                Temukan office kami di Bandung Barat untuk berdiskusi langsung mengenai sampel material dan konsep interior impian Anda.
-              </p>
-            </div>
+            <SectionHeading
+              index="07"
+              eyebrow="Lokasi office"
+              title="Kunjungi office kami"
+              subtitle="Temukan office kami di Bandung Barat untuk berdiskusi langsung mengenai sampel material dan konsep interior impian Anda."
+            />
           </Reveal>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-            {/* Location Info Card */}
-            <div className="lg:col-span-5 flex flex-col">
-              <Reveal direction="right">
-                <div className="p-2.5 rounded-3xl bg-black/5 dark:bg-white/5 border border-foreground/10 shadow-xl h-full">
-                  <div className="bg-background rounded-[calc(1.5rem-0.25rem)] p-7 md:p-8 h-full flex flex-col justify-between border border-foreground/5 shadow-xs gap-8">
-                    <div className="flex flex-col gap-6">
-                      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider text-secondary bg-secondary/10 border border-secondary/20 w-fit">
-                        <Compass className="w-3.5 h-3.5 shrink-0" />
-                        <span>{siteConfig.plusCode}</span>
-                      </div>
-
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/5 border border-foreground/10 flex items-center justify-center text-primary shrink-0 mt-1">
-                          <MapPin className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-serif text-lg font-medium text-primary mb-1">
-                            Alamat Office
-                          </h4>
-                          <p className="font-sans text-xs md:text-sm text-warm-gray leading-relaxed">
-                            {siteConfig.address}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-4 pt-4 border-t border-foreground/10">
-                        <div className="w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/5 border border-foreground/10 flex items-center justify-center text-primary shrink-0 mt-1">
-                          <Clock className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-serif text-lg font-medium text-primary mb-1">
-                            Jam Operasional Office
-                          </h4>
-                          <p className="font-sans text-xs md:text-sm text-warm-gray leading-relaxed">
-                            Senin – Sabtu: 08:00 – 17:00 WIB
-                          </p>
-                          <span className="font-sans text-[11px] text-warm-gray/80 italic mt-0.5 block">
-                            *Kunjungan survei/diskusi disarankan dengan janji temu
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <a
-                      href={siteConfig.googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group inline-flex items-center justify-between bg-primary text-soft-white font-sans text-xs uppercase tracking-wider px-6 py-4 rounded-full hover:bg-secondary transition-all active:scale-98 shadow-md w-full mt-2"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Navigation className="w-4 h-4" />
-                        <span className="font-semibold">Petunjuk Arah Google Maps</span>
-                      </div>
-                      <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                        <ArrowUpRight className="w-3.5 h-3.5 text-white" />
-                      </span>
-                    </a>
+          <div className="mt-14 md:mt-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            <div className="lg:col-span-4">
+              <Reveal>
+                <dl className="rule-list border-t border-foreground/15">
+                  <div className="py-6">
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-secondary mb-2.5">
+                      Plus code
+                    </dt>
+                    <dd className="font-sans text-sm text-primary">{siteConfig.plusCode}</dd>
                   </div>
-                </div>
+                  <div className="py-6">
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-secondary mb-2.5">
+                      Alamat office
+                    </dt>
+                    <dd className="font-sans text-sm text-warm-gray leading-relaxed">
+                      {siteConfig.address}
+                    </dd>
+                  </div>
+                  <div className="py-6">
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.2em] text-secondary mb-2.5">
+                      Jam operasional
+                    </dt>
+                    <dd className="font-sans text-sm text-warm-gray leading-relaxed">
+                      Senin – Sabtu, 08:00 – 17:00 WIB
+                      <span className="block text-[11px] text-warm-gray/80 italic mt-1.5">
+                        Kunjungan survei atau diskusi disarankan dengan janji temu.
+                      </span>
+                    </dd>
+                  </div>
+                </dl>
+
+                <a
+                  href={siteConfig.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-8 inline-flex items-center gap-2.5 text-[11px] font-mono uppercase tracking-[0.18em] text-primary hover:text-secondary transition-colors border-b border-foreground/25 hover:border-secondary pb-1.5"
+                >
+                  <span>Petunjuk arah Google Maps</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
               </Reveal>
             </div>
 
-            {/* Interactive Map Frame */}
-            <div className="lg:col-span-7 flex flex-col min-h-[380px] lg:min-h-[440px]">
-              <Reveal delay={0.15}>
-                <div className="p-2.5 rounded-3xl bg-black/5 dark:bg-white/5 border border-foreground/10 shadow-xl h-full w-full">
-                  <div className="relative w-full h-full min-h-[360px] lg:min-h-[420px] rounded-[calc(1.5rem-0.25rem)] overflow-hidden bg-muted border border-foreground/5 shadow-xs">
-                    <iframe
-                      title="Peta Lokasi FULLHOME ID Office"
-                      src={mapEmbedUrl}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, minHeight: "360px" }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="w-full h-full min-h-[360px] lg:min-h-[420px] grayscale hover:grayscale-0 transition-all duration-700"
-                    />
-                    <a
-                      href={siteConfig.googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="absolute top-4 right-4 bg-background/90 backdrop-blur-md px-4 py-2 rounded-full border border-foreground/15 text-xs font-sans font-medium text-primary hover:text-secondary shadow-md transition-colors flex items-center gap-2"
-                    >
-                      <span>Buka Peta Penuh</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-secondary" />
-                    </a>
-                  </div>
+            <div className="lg:col-span-8">
+              <Reveal delay={0.1}>
+                {/* The map keeps a frame — here the border marks an embedded surface. */}
+                <div className="relative w-full aspect-[4/3] lg:aspect-[16/10] overflow-hidden bg-muted border border-foreground/10">
+                  <iframe
+                    title="Peta lokasi office FULLHOME ID di Citatah, Bandung Barat"
+                    src={mapEmbedUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={false}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
+                  />
                 </div>
               </Reveal>
             </div>
