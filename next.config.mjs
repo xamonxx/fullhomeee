@@ -2,6 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   /**
+   * The production host runs CloudLinux, which caps how many processes the
+   * account may spawn. Next's default build fan-out (18 workers here) tripped
+   * that limit with `spawn node EAGAIN` right after "Collecting page data".
+   * Building single-threaded costs a few seconds and always completes.
+   */
+  experimental: { cpus: 1, workerThreads: false },
+  /**
    * sharp ships a native binding. Left to the bundler, Turbopack pulled it in
    * through its ESM `externalImport` path and the addon failed to load
    * (ERR_DLOPEN_FAILED on win32-x64), taking the server process down whenever
