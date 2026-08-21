@@ -115,7 +115,7 @@ export function PortfolioBrowser({
 
           <div className="flex items-center gap-2">
             <span className="font-serif text-base text-primary font-medium">FULLHOME ID</span>
-            <span className="text-foreground/25 text-sm">/</span>
+            <span className="text-warm-gray text-sm">/</span>
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-warm-gray">
               Portofolio
             </span>
@@ -129,8 +129,12 @@ export function PortfolioBrowser({
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-primary hover:text-secondary transition-colors shrink-0 border-b border-foreground/25 hover:border-secondary pb-1"
           >
-            <MessageCircle className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Konsultasi Gratis</span>
+            <MessageCircle aria-hidden className="w-3.5 h-3.5" />
+            {/* `hidden` below the sm breakpoint left this link with no accessible
+                name at all on phones — the icon is its only other content.
+                `sr-only` keeps the label for assistive tech while staying
+                invisible, and `not-sr-only` restores it on wider screens. */}
+            <span className="sr-only sm:not-sr-only">Konsultasi Gratis</span>
           </a>
         </div>
       </header>
@@ -144,7 +148,11 @@ export function PortfolioBrowser({
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-12 items-end">
-            <h1 className="enter enter-d1 lg:col-span-7 font-serif text-[2.4rem] md:text-5xl lg:text-[3.5rem] text-primary font-medium leading-[1.05] tracking-[-0.02em]">
+            {/* No `.enter` here: this heading is the LCP element, and the entrance
+                animation starts it at opacity 0, so Chrome did not count it as
+                painted until the fade finished — 684 ms after FCP, measured under
+                4x CPU and slow 4G. The lead and stats below still animate in. */}
+            <h1 className="lg:col-span-7 font-serif text-[2.4rem] md:text-5xl lg:text-[3.5rem] text-primary font-medium leading-[1.05] tracking-[-0.02em]">
               {heading}
             </h1>
 
@@ -188,7 +196,7 @@ export function PortfolioBrowser({
               placeholder="Cari nama klien atau lokasi..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-8 pr-10 py-3 bg-transparent border-0 border-b border-foreground/20 text-sm font-sans text-primary placeholder:text-warm-gray/60 focus:outline-none focus:border-secondary transition-colors"
+              className="w-full pl-8 pr-10 py-3 bg-transparent border-0 border-b border-foreground/20 text-sm font-sans text-primary placeholder:text-warm-gray focus:outline-none focus:border-secondary transition-colors"
             />
             {searchInput && (
               <button
@@ -223,6 +231,12 @@ export function PortfolioBrowser({
                     <li key={cat.id}>
                       <Link
                         href={categoryHref(cat.id)}
+                        // Both category lists render every category, so Next fired
+                        // an RSC prefetch for all of them the moment the nav entered
+                        // the viewport: 23 requests and 60 KB competing with the
+                        // fonts and thumbnails during load. Every target is
+                        // prerendered, so navigation stays fast without it.
+                        prefetch={false}
                         aria-current={active ? "page" : undefined}
                         className={`group w-full text-left py-3 flex items-baseline justify-between gap-3 text-[13px] transition-colors ${
                           active ? "text-primary font-medium" : "text-warm-gray hover:text-primary"
@@ -237,7 +251,7 @@ export function PortfolioBrowser({
                           />
                           {cat.label}
                         </span>
-                        <span className="font-mono text-[10px] tabular-nums text-warm-gray/70 shrink-0">
+                        <span className="font-mono text-[10px] tabular-nums text-warm-gray shrink-0">
                           {cat.count.toLocaleString("id")}
                         </span>
                       </Link>
@@ -256,6 +270,7 @@ export function PortfolioBrowser({
                 <Link
                   key={cat.id}
                   href={categoryHref(cat.id)}
+                  prefetch={false}
                   aria-current={activeCategory === cat.id ? "page" : undefined}
                   className={`pb-2 text-xs font-medium whitespace-nowrap flex-shrink-0 border-b-2 transition-colors ${
                     activeCategory === cat.id

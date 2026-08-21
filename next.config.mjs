@@ -79,6 +79,10 @@ const nextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
+    // The hero frame renders ~420px wide on desktop, but the smallest device
+    // size is 640, so `sizes` had nothing smaller to select and always pulled
+    // the 640px variant. 448 and 512 give it somewhere to land.
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 448, 512],
     remotePatterns: [
       {
         protocol: 'https',

@@ -50,7 +50,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
     <section className="py-24 md:py-36 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
       <Reveal>
         <div className="chapter-label mb-10 md:mb-14">
-          <span className="text-foreground/35 tabular-nums">08</span>
+          <span className="text-warm-gray tabular-nums">08</span>
           <span>Ulasan klien</span>
         </div>
       </Reveal>

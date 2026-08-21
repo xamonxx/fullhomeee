@@ -9,6 +9,7 @@ import {
   type Project,
   type ProjectImage,
 } from "@/components/shared/portfolio-types";
+import { CARD_SIZES, imageSrcSet } from "@/lib/portfolio-image";
 
 /**
  * Grid card with an embedded image slider.
@@ -22,10 +23,18 @@ export function ProjectCardWithSlider({
   project,
   index,
   onClick,
+  eagerFirst = true,
 }: {
   project: Project;
   index: number;
   onClick: () => void;
+  /**
+   * Whether the first few cards are worth fetching at high priority. True on
+   * /portofolio, where the grid is the first thing on the page; false in the
+   * homepage teaser, which sits far below the fold — there the four eager
+   * thumbnails were preloaded at high priority and competed with the hero.
+   */
+  eagerFirst?: boolean;
 }) {
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -37,7 +46,11 @@ export function ProjectCardWithSlider({
       : [{ id: "cover", src: project.coverSrc, filename: project.name }];
 
   const currentSlide = slides[activeSlide] || slides[0];
-  const eager = index < EAGER_CARDS;
+  const eager = eagerFirst && index < EAGER_CARDS;
+
+  // The synthesised fallback slide carries the literal id "cover" and a ready-made
+  // URL rather than a real photo id, so it gets no srcset.
+  const srcSet = currentSlide.id === "cover" ? undefined : imageSrcSet(currentSlide.id);
 
   const goTo = useCallback((next: number) => {
     setActiveSlide(next);
@@ -73,6 +86,8 @@ export function ProjectCardWithSlider({
           <img
             key={currentSlide.src}
             src={currentSlide.src}
+            srcSet={srcSet}
+            sizes={srcSet ? CARD_SIZES : undefined}
             // `project.name` already opens with the category, so prefixing it
             // produced "Wardrobe – Wardrobe" — visible on screen whenever an
             // image failed to load.

@@ -36,6 +36,10 @@ export const MANIFEST_PATH = path.join(CACHE_DIR, "manifest.json");
 
 /** Variants generated per source photo. Cards/grids use `thumb`, the lightbox uses `full`. */
 export const VARIANTS = {
+  // Cards render ~184 CSS px wide in the two-column grid on a phone, so 640px
+  // was roughly four times the pixels needed at DPR 1.75. `card` covers phones
+  // and `thumb` covers high-DPR and wider viewports, chosen via srcset.
+  card: { width: 400, quality: 70 },
   thumb: { width: 640, quality: 72 },
   full: { width: 1600, quality: 80 },
 } as const;
@@ -43,7 +47,7 @@ export const VARIANTS = {
 export type VariantName = keyof typeof VARIANTS;
 
 export function isVariantName(v: string): v is VariantName {
-  return v === "thumb" || v === "full";
+  return Object.prototype.hasOwnProperty.call(VARIANTS, v);
 }
 
 /** Browser-displayable source extensions. HEIC is excluded — browsers cannot render it. */

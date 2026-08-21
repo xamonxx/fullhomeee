@@ -98,6 +98,7 @@ export function PortfolioGrid({ initialProjects, categories, teaserCount }: Prop
               key={project.id}
               project={project}
               index={idx}
+              eagerFirst={false}
               onClick={() => setSelectedProject(project)}
             />
           ))}

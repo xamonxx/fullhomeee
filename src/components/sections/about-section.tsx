@@ -4,6 +4,7 @@ import { WhatsAppButton } from "@/components/shared/whatsapp-button";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { siteConfig } from "@/config/site";
 import { ArrowUpRight } from "lucide-react";
+import { MapEmbed } from "@/components/shared/map-embed";
 
 const stats = [
   {
@@ -69,8 +70,6 @@ const values = [
  * embedded surface.
  */
 export function AboutSection() {
-  const mapEmbedUrl = `https://maps.google.com/maps?q=5C8C%2B8P+Citatah,+West+Bandung+Regency,+West+Java&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-
   return (
     <section id="about" className="py-24 md:py-36 bg-background relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col gap-24 md:gap-36">
@@ -81,7 +80,6 @@ export function AboutSection() {
               <figure className="relative">
                 <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
                   <Image
-                    data-motion="parallax"
                     src="/images/about-home.png"
                     alt="Ruang keluarga hasil pengerjaan FULLHOME ID dengan palet kayu hangat"
                     fill
@@ -105,7 +103,7 @@ export function AboutSection() {
           <div className="lg:col-span-7 flex flex-col gap-7">
             <Reveal delay={0.05}>
               <div className="chapter-label mb-6">
-                <span className="text-foreground/35 tabular-nums">05</span>
+                <span className="text-warm-gray tabular-nums">05</span>
                 <span>Tentang studio</span>
               </div>
               <h2 className="font-serif text-[2.1rem] leading-[1.05] md:text-5xl lg:text-[3.5rem] text-primary font-medium tracking-[-0.02em]">
@@ -193,7 +191,9 @@ export function AboutSection() {
             {values.map((item, idx) => (
               <Reveal key={item.number} delay={idx * 0.06}>
                 <article className="flex gap-6 md:gap-8 py-9 md:py-11 border-b border-foreground/10 h-full">
-                  <span className="numeral shrink-0 pt-1">{item.number}</span>
+                  <span aria-hidden className="numeral shrink-0 pt-1">
+                    {item.number}
+                  </span>
                   <div>
                     <h3 className="font-serif text-xl md:text-2xl font-medium text-primary leading-snug mb-3">
                       {item.title}
@@ -243,7 +243,7 @@ export function AboutSection() {
                     </dt>
                     <dd className="font-sans text-sm text-warm-gray leading-relaxed">
                       Senin – Sabtu, 08:00 – 17:00 WIB
-                      <span className="block text-[11px] text-warm-gray/80 italic mt-1.5">
+                      <span className="block text-[11px] text-warm-gray italic mt-1.5">
                         Kunjungan survei atau diskusi disarankan dengan janji temu.
                       </span>
                     </dd>
@@ -264,20 +264,7 @@ export function AboutSection() {
 
             <div className="lg:col-span-8">
               <Reveal delay={0.1}>
-                {/* The map keeps a frame — here the border marks an embedded surface. */}
-                <div className="relative w-full aspect-[4/3] lg:aspect-[16/10] overflow-hidden bg-muted border border-foreground/10">
-                  <iframe
-                    title="Peta lokasi office FULLHOME ID di Citatah, Bandung Barat"
-                    src={mapEmbedUrl}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen={false}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
-                  />
-                </div>
+                <MapEmbed />
               </Reveal>
             </div>
           </div>

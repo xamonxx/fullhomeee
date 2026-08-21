@@ -73,13 +73,15 @@ function isFresh(srcPath: string, outPath: string, srcMtime: number): boolean {
   }
 }
 
-/** Build both variants + a blurred placeholder for one photo. */
+/** Build every variant + a blurred placeholder for one photo. */
 async function processImage(srcPath: string): Promise<ManifestImage | null> {
   const srcStat = await fsp.stat(srcPath);
-  const outputs: Record<VariantName, string> = {
-    thumb: variantFile(srcPath, "thumb"),
-    full: variantFile(srcPath, "full"),
-  };
+  // Derived from VARIANTS rather than listed by hand: the previous literal only
+  // named thumb and full, so adding a variant left it out of the freshness check
+  // and every photo was reported "fresh" while the new size was never written.
+  const outputs = Object.fromEntries(
+    (Object.keys(VARIANTS) as VariantName[]).map((v) => [v, variantFile(srcPath, v)])
+  ) as Record<VariantName, string>;
 
   const allFresh = (Object.keys(outputs) as VariantName[]).every((v) =>
     isFresh(srcPath, outputs[v], srcStat.mtimeMs)

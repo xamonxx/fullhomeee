@@ -78,10 +78,14 @@
   background-color: color-mix(in srgb, var(--foreground) 15%, transparent);
 }
 
-/* Large editorial numerals used by the trust list and process timeline. */
+/* Large editorial numerals used by the trust list and process timeline.
+   At 22% these measured 1.58:1 against the cream background. Every usage is
+   also `aria-hidden` (the surrounding <ol>/list already carries the order), but
+   decoration a sighted reader can see should still be legible: 50% gives 3.27:1,
+   which clears the 3:1 threshold WCAG sets for text at this size (36px+). */
 .numeral {
   @apply font-serif text-4xl md:text-5xl leading-none tabular-nums;
-  color: color-mix(in srgb, var(--foreground) 22%, transparent);
+  color: color-mix(in srgb, var(--foreground) 50%, transparent);
 }
 
 /* Hairline row separators — the card replacement. */

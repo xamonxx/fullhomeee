@@ -95,13 +95,15 @@ export function HeroSection() {
                 frame never crops it. */}
             <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
               <Image
-                data-motion="parallax"
                 src="/images/hero-kitchen-modern.webp"
                 alt="Dapur modern dua lantai hasil pengerjaan FULLHOME ID: kabinet abu hangat, backsplash bergaris, lampu gantung, dan kursi bar oranye"
                 fill
                 priority
                 loading="eager"
-                sizes="(max-width: 1024px) 100vw, 42vw"
+                // The frame is one 5-of-12 column inside a 1152 px container, so
+                // it never exceeds ~420 px on desktop. 42vw asked for 567 px and
+                // pulled down the 640 px variant for nothing.
+                sizes="(max-width: 1023px) 100vw, (max-width: 1152px) 37vw, 420px"
                 className="object-cover"
               />
             </div>

@@ -41,7 +41,9 @@ export function ServicesSection() {
           <Reveal key={service.id} delay={idx * 0.05}>
             <article className="group grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-6 py-10 md:py-14 border-b border-foreground/10">
               <div className="lg:col-span-4 flex gap-5">
-                <span className="numeral shrink-0">{String(idx + 1).padStart(2, "0")}</span>
+                <span aria-hidden className="numeral shrink-0">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-secondary mb-2.5">
                     {service.subtitle}

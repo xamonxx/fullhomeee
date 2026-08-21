@@ -64,7 +64,9 @@ export function TrustSection() {
           {trustPillars.map((pillar, idx) => (
             <Reveal key={pillar.title} delay={idx * 0.06}>
               <article className="flex gap-6 md:gap-8 py-9 md:py-11 border-b border-foreground/10 h-full">
-                <span className="numeral shrink-0 pt-1">{String(idx + 1).padStart(2, "0")}</span>
+                <span aria-hidden className="numeral shrink-0 pt-1">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-secondary mb-3">
                     {pillar.badge}

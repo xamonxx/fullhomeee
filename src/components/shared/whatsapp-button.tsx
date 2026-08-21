@@ -16,7 +16,9 @@ export function FloatingWhatsApp({ className }: FloatingWhatsAppProps) {
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Hubungi FULLHOME ID via WhatsApp"
+      // WCAG 2.5.3: the accessible name has to contain the visible text, and the
+      // visible text here is "Chat WhatsApp".
+      aria-label="Chat WhatsApp dengan FULLHOME ID"
       className={cn(
         "fixed bottom-6 right-6 z-40 bg-muted-olive hover:bg-secondary text-soft-white p-3.5 md:p-4 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2",
         className
@@ -62,7 +64,8 @@ export function WhatsAppButton({
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Konsultasi via WhatsApp FULLHOME ID"
+      // No aria-label: it overrode the visible label with different words, so the
+      // button announced something the caller could not read on screen.
       className={cn(baseStyles, variantStyles[variant], className)}
     >
       <MessageCircle className="w-4 h-4 mr-2.5 shrink-0" />

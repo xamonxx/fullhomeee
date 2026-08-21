@@ -25,7 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           id={inputId}
           className={cn(
-            "flex h-12 w-full rounded-md border border-light-taupe bg-soft-white px-4 py-2 text-sm text-primary placeholder:text-warm-gray/60 transition-colors focus:border-secondary focus:outline-none focus:ring-1 focus:ring-secondary disabled:cursor-not-allowed disabled:opacity-50",
+            "flex h-12 w-full rounded-md border border-light-taupe bg-soft-white px-4 py-2 text-sm text-primary placeholder:text-warm-gray transition-colors focus:border-secondary focus:outline-none focus:ring-1 focus:ring-secondary disabled:cursor-not-allowed disabled:opacity-50",
             error && "border-destructive focus:border-destructive focus:ring-destructive",
             className
           )}

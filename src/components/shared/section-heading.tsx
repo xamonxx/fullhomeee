@@ -41,7 +41,7 @@ export function SectionHeading({
             centered && "justify-center [&::after]:hidden"
           )}
         >
-          {index && <span className="text-foreground/35 tabular-nums">{index}</span>}
+          {index && <span className="text-warm-gray tabular-nums">{index}</span>}
           <span>{eyebrow}</span>
         </div>
       )}

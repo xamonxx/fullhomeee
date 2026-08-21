@@ -44,58 +44,69 @@ export function ProcessSection() {
         </div>
 
         {/* Timeline: one continuous rule with each stage hanging off it. */}
-        <ol className="mt-16 md:mt-24 relative">
+        <div className="mt-16 md:mt-24 relative">
+          {/* The timeline rule is decoration, so it sits outside the <ol>: a list
+              may only contain <li> children. */}
           <span
             aria-hidden
             className="hidden md:block absolute left-[calc(4rem+1px)] top-3 bottom-3 w-px bg-foreground/12"
           />
 
-          {processStepsData.map((step, idx) => (
-            <Reveal key={step.step} delay={idx * 0.05}>
-              <li className="relative grid grid-cols-1 md:grid-cols-12 gap-x-10 gap-y-5 py-10 md:py-14 border-t border-foreground/10">
-                <div className="md:col-span-3 flex md:block items-baseline gap-4">
-                  <span className="numeral text-foreground/25">
-                    {String(step.step).padStart(2, "0")}
-                  </span>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-secondary md:mt-3">
-                    {step.subtitle}
-                  </p>
-                </div>
-
-                <div className="md:col-span-5">
-                  <h3 className="font-serif text-2xl md:text-[1.75rem] leading-tight font-medium text-primary mb-4">
-                    {step.title}
-                  </h3>
-                  <p className="font-sans text-sm text-warm-gray leading-relaxed measure">
-                    {step.description}
-                  </p>
-                </div>
-
-                <div className="md:col-span-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-warm-gray/70 mb-3">
-                    Hasil keluaran
-                  </p>
-                  <ul className="rule-list">
-                    {step.details.map((detail) => (
-                      <li
-                        key={detail}
-                        className="flex items-baseline gap-3 py-2.5 font-sans text-[13px] text-primary/80"
-                      >
-                        <span className="w-1 h-1 rounded-full bg-secondary shrink-0 translate-y-[-3px]" />
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  {step.footnote && (
-                    <p className="font-sans text-[11px] text-warm-gray/70 italic mt-3 leading-snug">
-                      {step.footnote}
+          <ol>
+            {processStepsData.map((step, idx) => (
+              <li key={step.step} className="border-t border-foreground/10">
+                {/* Reveal wraps the row *inside* the <li>, never around it —
+                    wrapping it outside made every <li> a child of a <div>. */}
+                <Reveal
+                  delay={idx * 0.05}
+                  className="relative grid grid-cols-1 md:grid-cols-12 gap-x-10 gap-y-5 py-10 md:py-14"
+                >
+                  <div className="md:col-span-3 flex md:block items-baseline gap-4">
+                    {/* The <ol> already conveys the order, so the numeral is
+                        decoration and is not announced twice. */}
+                    <span aria-hidden className="numeral">
+                      {String(step.step).padStart(2, "0")}
+                    </span>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-secondary md:mt-3">
+                      {step.subtitle}
                     </p>
-                  )}
-                </div>
+                  </div>
+
+                  <div className="md:col-span-5">
+                    <h3 className="font-serif text-2xl md:text-[1.75rem] leading-tight font-medium text-primary mb-4">
+                      {step.title}
+                    </h3>
+                    <p className="font-sans text-sm text-warm-gray leading-relaxed measure">
+                      {step.description}
+                    </p>
+                  </div>
+
+                  <div className="md:col-span-4">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-warm-gray mb-3">
+                      Hasil keluaran
+                    </p>
+                    <ul className="rule-list">
+                      {step.details.map((detail) => (
+                        <li
+                          key={detail}
+                          className="flex items-baseline gap-3 py-2.5 font-sans text-[13px] text-primary/80"
+                        >
+                          <span className="w-1 h-1 rounded-full bg-secondary shrink-0 translate-y-[-3px]" />
+                          <span>{detail}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {step.footnote && (
+                      <p className="font-sans text-[11px] text-warm-gray italic mt-3 leading-snug">
+                        {step.footnote}
+                      </p>
+                    )}
+                  </div>
+                </Reveal>
               </li>
-            </Reveal>
-          ))}
-        </ol>
+            ))}
+          </ol>
+        </div>
 
         {/* Payment schedule — a plain band, not another boxed card. */}
         <Reveal delay={0.1}>
@@ -106,10 +117,14 @@ export function ProcessSection() {
             <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
               {paymentStages.map((item) => (
                 <div key={item.num} className="border-t border-foreground/15 pt-4">
-                  <span className="font-serif text-2xl text-foreground/25 tabular-nums">
-                    {item.num}
-                  </span>
-                  <dt className="font-sans text-sm font-medium text-primary mt-2">{item.label}</dt>
+                  {/* The numeral belongs inside the <dt>: as a bare <span> it was
+                      a direct child of the <dl>, which is invalid. */}
+                  <dt className="font-sans text-sm font-medium text-primary">
+                    <span aria-hidden className="block font-serif text-2xl text-foreground tabular-nums mb-2">
+                      {item.num}
+                    </span>
+                    {item.label}
+                  </dt>
                   <dd className="font-sans text-xs text-warm-gray mt-1.5 leading-relaxed">
                     {item.desc}
                   </dd>
